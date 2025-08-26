@@ -75,7 +75,7 @@ if payload:
     titles = movies['Series_Title'].astype(str).tolist()
 
     # ----------------------------
-    # Sidebar Controls
+    # Sidebar Controls (cleaned)
     # ----------------------------
     st.sidebar.header("🔍 Find Movies")
     query = st.sidebar.selectbox("Select a movie", sorted(titles))
@@ -83,7 +83,7 @@ if payload:
     min_rating = st.sidebar.slider("Minimum IMDb rating", 0.0, 10.0, 0.0, 0.1)
 
     # ----------------------------
-    # Recommendation Logic
+    # Recommendation Logic (no genre filter)
     # ----------------------------
     def recommend(title, topn=10, min_rating=0.0):
         if title not in indices:
