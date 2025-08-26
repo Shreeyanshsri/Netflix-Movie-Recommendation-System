@@ -81,12 +81,11 @@ if payload:
     query = st.sidebar.selectbox("Select a movie", sorted(titles))
     topn = st.sidebar.slider("Number of recommendations", 5, 20, 10)
     min_rating = st.sidebar.slider("Minimum IMDb rating", 0.0, 10.0, 0.0, 0.1)
-    genre_filter = st.sidebar.text_input("Genre contains (optional)", "")
 
     # ----------------------------
     # Recommendation Logic
     # ----------------------------
-    def recommend(title, topn=10, min_rating=0.0, genre_contains=""):
+    def recommend(title, topn=10, min_rating=0.0):
         if title not in indices:
             return pd.DataFrame(columns=['title','genre','rating','similarity'])
         idx = indices[title]
@@ -100,8 +99,6 @@ if payload:
         if min_rating > 0:
             if 'rating' in result.columns:
                 result = result[result['rating'].fillna(0) >= min_rating]
-        if genre_contains.strip():
-            result = result[result['genre'].astype(str).str.contains(genre_contains, case=False, na=False)]
         return result.head(topn)[['Series_Title','Genre','IMDB_Rating','Director','similarity']]
 
     # ----------------------------
@@ -115,7 +112,7 @@ if payload:
         time.sleep(0.01)
         progress_bar.progress(i+1)
 
-    recs = recommend(query, topn=topn, min_rating=min_rating, genre_contains=genre_filter)
+    recs = recommend(query, topn=topn, min_rating=min_rating)
 
     for i in range(80, 100):
         time.sleep(0.01)
